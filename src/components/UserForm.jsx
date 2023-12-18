@@ -12,41 +12,35 @@ const UserForm = () => {
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-   const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const getUser = async()=> {
-    let getUser = await axios.get(
-      "https://psrl.onrender.com/api/users/getUser"
-    );
-
-    // Handle the response as needed (e.g., show success message)
-    // console.log("Response:", getUser.data);
-    setApiResponse(getUser.data);
-  }
+  const getUser = async () => {
+    try {
+      let getUser = await axios.get(
+        "https://psrl.onrender.com/api/users/getUser"
+      );
+      setApiResponse(getUser.data);
+    } catch (error) {
+      console.log("Error:", error);
+      setError(error.message);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       // Replace 'API_ENDPOINT' with the actual endpoint of your backend API
-      let response = await axios.post(
-        "https://psrl.onrender.com/api/users/signup",
-        formData
-      );
-
-      
+      await axios.post("https://psrl.onrender.com/api/users/signup", formData);
       setError(null);
-      alert("submitted successfully")
+      alert("submitted successfully");
     } catch (error) {
       // Handle errors (e.g., show error message)
       console.error("Error in submitting:", error);
       setError(error.message);
-      setApiResponse(null);
-      
+      // setApiResponse(null);
     }
   };
   getUser();
-
 
   return (
     <div>
