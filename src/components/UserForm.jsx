@@ -15,6 +15,15 @@ const UserForm = () => {
    const {name, value} = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const getUser = async()=> {
+    let getUser = await axios.get(
+      "https://psrl.onrender.com/api/users/getUser"
+    );
+
+    // Handle the response as needed (e.g., show success message)
+    // console.log("Response:", getUser.data);
+    setApiResponse(getUser.data);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,9 +34,7 @@ const UserForm = () => {
         formData
       );
 
-      // Handle the response as needed (e.g., show success message)
-      console.log("Response:", response.data);
-      setApiResponse(response.data);
+      
       setError(null);
       alert("submitted successfully")
     } catch (error) {
@@ -38,6 +45,8 @@ const UserForm = () => {
       
     }
   };
+  getUser();
+
 
   return (
     <div>
@@ -79,10 +88,25 @@ const UserForm = () => {
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
 
+      {/* {apiResponse && (
+        <div>
+          <h2>API Response:</h2>
+          {apiResponse.map((data) => JSON.stringify(data))}
+        </div>
+      )} */}
       {apiResponse && (
         <div>
           <h2>API Response:</h2>
-          <pre>{(JSON.stringify(apiResponse, null, 2))}</pre>
+          {apiResponse.map((data, index) => (
+            <div key={index}>
+              <p>
+                <b>Name:</b> {data.name}, <b>Email:</b> {data.email},
+                <b>Phone</b> {data.phone}
+              </p>
+              <hr />
+              {/* <p>Email: {data.email}</p> */}
+            </div>
+          ))}
         </div>
       )}
     </div>
